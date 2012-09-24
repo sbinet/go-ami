@@ -8,5 +8,3 @@ type Config struct {
 }
 
 // EOF
-
-

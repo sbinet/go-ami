@@ -19,7 +19,7 @@ func main() {
 		Commands: []*commander.Command{
 			ami_make_list_cmd(),
 		},
-	Flag: flag.NewFlagSet("ami", flag.ExitOnError),
+		Flag: flag.NewFlagSet("ami", flag.ExitOnError),
 	}
 	//TODO: check the value *is* in the [main,replica] list
 	g_cmd.Flag.String("server", "main", "set the server (main, replica)")

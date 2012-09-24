@@ -36,4 +36,3 @@ ex:
 	cmd.Flag.String("periods", "", "comma-separated list of period name(s) e.g. M1,M2")
 	return cmd
 }
-
