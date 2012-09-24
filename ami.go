@@ -25,7 +25,8 @@ func main() {
 	g_cmd.Flag.Bool("debug", false, "show a stack trace")
 	g_cmd.Flag.String("format", "text", "format of verbose output")
 
-	//TODO: check the value *is* in the [main,replica] list
+	//TODO: check the value *is* in the [main,replica] list via a special
+	//      flag.Value implementation ?
 	g_cmd.Flag.String("server", "main", "set the server (main, replica)")
 
 	err := g_cmd.Flag.Parse(os.Args[1:])
