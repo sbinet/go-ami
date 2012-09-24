@@ -21,6 +21,10 @@ func main() {
 		},
 		Flag: flag.NewFlagSet("ami", flag.ExitOnError),
 	}
+	g_cmd.Flag.Bool("verbose", false, "show verbose output")
+	g_cmd.Flag.Bool("debug", false, "show a stack trace")
+	g_cmd.Flag.String("format", "text", "format of verbose output")
+
 	//TODO: check the value *is* in the [main,replica] list
 	g_cmd.Flag.String("server", "main", "set the server (main, replica)")
 
@@ -29,6 +33,12 @@ func main() {
 		fmt.Printf("**err** %v\n", err)
 		os.Exit(1)
 	}
+	g_ami = ami.NewClient(
+		g_cmd.Flag.Lookup("verbose").Value.Get().(bool),
+		g_cmd.Flag.Lookup("format").Value.Get().(string),
+		)
+	ami.EndPointType = g_cmd.Flag.Lookup("server").Value.Get().(string)
+
 	args := g_cmd.Flag.Args()
 
 	fmt.Printf("%s: server=%v\n", g_cmd.Name, g_cmd.Flag.Lookup("server").Value)
