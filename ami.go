@@ -37,7 +37,12 @@ func main() {
 		g_cmd.Flag.Lookup("verbose").Value.Get().(bool),
 		g_cmd.Flag.Lookup("format").Value.Get().(string),
 		)
-	ami.EndPointType = g_cmd.Flag.Lookup("server").Value.Get().(string)
+	server := g_cmd.Flag.Lookup("server").Value.Get().(string)
+	if server != "main" && server != "replica" {
+		fmt.Printf("**error**. server has to be either 'main' or 'replica' (got: %q)\n", server)
+		os.Exit(1)
+	}
+	ami.EndPointType = server
 
 	args := g_cmd.Flag.Args()
 
