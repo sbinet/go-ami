@@ -1,10 +1,15 @@
 package ami
 
 import (
-	_ "github.com/sbinet/go-config/config"
+	"github.com/sbinet/go-config/config"
 )
 
 type Config struct {
+	config.Config
+}
+
+func NewConfig() Config {
+	return Config{}
 }
 
 // EOF

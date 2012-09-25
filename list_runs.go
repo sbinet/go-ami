@@ -8,7 +8,7 @@ import (
 	"github.com/sbinet/go-flag"
 )
 
-func list_cmd_run(cmd *commander.Command, args []string) {
+func run_list_runs(cmd *commander.Command, args []string) {
 	n := cmd.Name()
 	fmt.Printf("%s:  args: %v\n", n, args)
 	fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
@@ -19,9 +19,9 @@ func list_cmd_run(cmd *commander.Command, args []string) {
 	fmt.Printf("%s: periods=%v\n", n, periods)
 }
 
-func ami_make_list_cmd() *commander.Command {
+func ami_make_list_runs_cmd() *commander.Command {
 	cmd := &commander.Command{
-		Run:       list_cmd_run,
+		Run:       run_list_runs,
 		UsageLine: "list-runs -year YEAR -period PERIOD",
 		Short:     "List runs in a data period for a given year",
 		Long: `

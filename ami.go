@@ -17,7 +17,8 @@ func main() {
 	g_cmd = &commander.Commander{
 		Name: os.Args[0],
 		Commands: []*commander.Command{
-			ami_make_list_cmd(),
+			ami_make_list_runs_cmd(),
+			ami_make_list_projects_cmd(),
 		},
 		Flag: flag.NewFlagSet("ami", flag.ExitOnError),
 	}
