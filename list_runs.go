@@ -17,6 +17,13 @@ func run_list_runs(cmd *commander.Command, args []string) {
 
 	periods := strings.Split(cmd.Flag.Lookup("periods").Value.Get().(string), ",")
 	fmt.Printf("%s: periods=%v\n", n, periods)
+	amiargs := make([]string, len(args))
+	copy(amiargs, args)
+	amiargs = append(amiargs, 
+		fmt.Sprintf("-year=%s", cmd.Flag.Lookup("year").Value), 
+		fmt.Sprintf("-periods=%s",cmd.Flag.Lookup("periods").Value),
+		)
+	g_ami.Execute(amiargs...)
 }
 
 func ami_make_list_runs_cmd() *commander.Command {

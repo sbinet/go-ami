@@ -47,7 +47,8 @@ type soapWebSvc struct {
 
 func (svc *soapWebSvc) ExecCmd(request *http.Request) (*http.Response, error) {
 	fmt.Printf("==ExecCmd(%q)...\n", request)
-	
-	return nil, nil
+	resp, err := svc.client.Do(request)
+	fmt.Printf("==> resp=%v\n   err=%v\n", resp,err)
+	return resp, err
 }
 // EOF

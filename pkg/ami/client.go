@@ -25,14 +25,8 @@ func NewClient(verbose bool, format string) *Client {
 	return c
 }
 
-func (c *Client) Execute(args []string) (*http.Response, error) {
+func (c *Client) Execute(args ...string) (*http.Response, error) {
 	
-     soapRequestContent := "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><SOAP-ENV:En ... elope>"
-    req, err := http.NewRequest("POST", "http://aSoapServer/", 
-		strings.NewReader(soapRequestContent))
-    req.Header.Set("SOAPAction", "anAction")
-    req.Header.Set("Content-Type", "application/soap+xml; charset=utf-8")
-    req.Header.Set("Content-Length", fmt.Sprintf("%d", len(soapRequestContent)))
 	amiargs := []string{"-command="+args[0]}
 	for _, arg := range args[1:] {
 		val := ""
@@ -55,6 +49,14 @@ func (c *Client) Execute(args []string) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
+    soapRequestContent := "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><SOAP-ENV:En ... elope>"
+    req, err := http.NewRequest("POST", c.svclocator.ServiceAddress(), 
+		strings.NewReader(soapRequestContent))
+    req.Header.Set("SOAPAction", "anAction")
+    req.Header.Set("Content-Type", "application/soap+xml; charset=utf-8")
+    req.Header.Set("Content-Length", fmt.Sprintf("%d", len(soapRequestContent)))
+
 	resp, err := svc.ExecCmd(req)
     if err!=nil {
 		return nil, err

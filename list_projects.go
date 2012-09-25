@@ -12,7 +12,7 @@ func run_list_projects(cmd *commander.Command, args []string) {
 	fmt.Printf("%s:  args: %v\n", n, args)
 	fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
 
-	g_ami.Execute([]string{"ListProject"})
+	g_ami.Execute("ListProject")
 }
 
 func ami_make_list_projects_cmd() *commander.Command {
