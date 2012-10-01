@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/sbinet/go-ami/pkg/ami"
 	"github.com/sbinet/go-commander"
 	"github.com/sbinet/go-flag"
-	"github.com/sbinet/go-ami/pkg/ami"
 )
 
 func run_list_runs(cmd *commander.Command, args []string) {
@@ -28,7 +28,7 @@ func run_list_runs(cmd *commander.Command, args []string) {
 		os.Exit(1)
 	}
 
-	for _,run := range runs {
+	for _, run := range runs {
 		fmt.Printf("%d\n", run)
 	}
 }

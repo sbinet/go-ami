@@ -9,7 +9,7 @@ var EndPointType = "main"
 func EndPoint() string {
 	switch EndPointType {
 	case "replica":
-        return "https://atlas-ami.cern.ch:8443"
+		return "https://atlas-ami.cern.ch:8443"
 	case "main":
 		return "https://ami.in2p3.fr:8443"
 	default:

@@ -10,12 +10,12 @@ import (
 
 type Message struct {
 	XMLName xml.Name `xml:"AMIMessage"`
-	Cmd string `xml:"command"`
+	Cmd     string   `xml:"command"`
 	//Time time.Time `xml:"time"`
-	CmdArgs []xml_cmdarg `xml:"commandArgs>args"`
-	Result Result `xml:"Result"`
-	CmdStatus string `xml:"commandStatus"`
-	ExecTime float64 `xml:"executionTime"`
+	CmdArgs   []xml_cmdarg `xml:"commandArgs>args"`
+	Result    Result       `xml:"Result"`
+	CmdStatus string       `xml:"commandStatus"`
+	ExecTime  float64      `xml:"executionTime"`
 }
 
 func (msg *Message) Status() bool {
@@ -23,7 +23,7 @@ func (msg *Message) Status() bool {
 }
 
 type xml_cmdarg struct {
-	Name string `xml:"argName,attr"`
+	Name  string `xml:"argName,attr"`
 	Value string `xml:"argValue,attr"`
 }
 
@@ -32,19 +32,19 @@ type Result struct {
 }
 
 type xml_rowfield struct {
-	Name string `xml:"name,attr"`
-	Table string `xml:"table,attr"`
+	Name     string `xml:"name,attr"`
+	Table    string `xml:"table,attr"`
 	TypeName string `xml:"type,attr"`
-	Data string `xml:",chardata"`
+	Data     string `xml:",chardata"`
 }
 
 type Row struct {
-	Num string `xml:"num,attr"`
+	Num    string         `xml:"num,attr"`
 	Fields []xml_rowfield `xml:"field"`
 }
 
 func (r *Row) Id() int {
-	i,err := strconv.Atoi(r.Num)
+	i, err := strconv.Atoi(r.Num)
 	if err != nil {
 		panic(fmt.Sprintf("ami.Row.Num: %v\n", err))
 	}
@@ -62,7 +62,7 @@ func (r *Row) Get(key string) interface{} {
 
 func (r *Row) Value() map[string]interface{} {
 	o := make(map[string]interface{}, len(r.Fields))
-	for _, f :=range r.Fields {
+	for _, f := range r.Fields {
 		o[f.Name] = f.Value()
 	}
 	return o
@@ -70,15 +70,15 @@ func (r *Row) Value() map[string]interface{} {
 
 func (r *xml_rowfield) Value() interface{} {
 	tn := strings.ToLower(r.TypeName)
-	if strings.HasPrefix(tn, "integer") || strings.HasPrefix(tn,"number") {
+	if strings.HasPrefix(tn, "integer") || strings.HasPrefix(tn, "number") {
 		val, err := strconv.Atoi(r.Data)
 		if err != nil {
 			panic(fmt.Sprintf("ami.Row.Value: %v\n", err))
 		}
 		return val
 	}
-	
-	if strings.HasPrefix(tn, "varchar") || tn == "text" || 
+
+	if strings.HasPrefix(tn, "varchar") || tn == "text" ||
 		strings.HasPrefix(tn, "char") {
 		return r.Data
 	}
@@ -92,7 +92,7 @@ func (r *xml_rowfield) Value() interface{} {
 		return val
 	}
 
-	panic("ami.Row.Value: unhandled typename ["+r.TypeName+"] (value="+r.Data+")")
+	panic("ami.Row.Value: unhandled typename [" + r.TypeName + "] (value=" + r.Data + ")")
 }
 
 /*
@@ -103,7 +103,7 @@ func (r *xml_rowfield) Value() interface{} {
 	<commandArgs><args argName="amiAdvanced" argValue="ON"/><args argName="amiLang" argValue="english"/><args argName="entity" argValue="router_project"/><args argName="processingStep" argValue="self"/><args argName="project" argValue="self"/><args argName="site" argValue="self"/><args argName="type" argValue="motherDatabase"/></commandArgs>
 	<connection  amiLogin="binet" type="router" >successful</connection>
 	<connection type="database" project="self" processingStep="self" >successful</connection>
-	
+
 <Result entity="router_project">
   <rowset type="router_project">
     <row num="1">

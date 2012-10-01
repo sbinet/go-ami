@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/sbinet/go-ami/pkg/ami"
 	"github.com/sbinet/go-commander"
 	"github.com/sbinet/go-flag"
-	"github.com/sbinet/go-ami/pkg/ami"
 )
 
 func path_exists(name string) bool {
@@ -43,7 +43,7 @@ func run_setup_auth(cmd *commander.Command, args []string) {
 			os.Exit(1)
 		}
 	}
-	
+
 	cert_fname := cmd.Flag.Lookup("usercert").Value.Get().(string)
 	if !path_exists(cert_fname) {
 		fmt.Printf("%s: no such user certificate file [%s]\n", n, cert_fname)
@@ -52,13 +52,13 @@ func run_setup_auth(cmd *commander.Command, args []string) {
 	if !path_exists(key_fname) {
 		fmt.Printf("%s: no such user key file [%s]\n", n, key_fname)
 	}
-	
+
 	user_cert, user_key, err := ami.LoadCert(cert_fname, key_fname)
 	if err != nil {
 		fmt.Printf("%s: %v\n", n, err)
 		os.Exit(1)
 	}
-	
+
 	cert_fname = filepath.Join(dirname, "usercert.pem")
 	err = ioutil.WriteFile(cert_fname, user_cert, 0600)
 	if err != nil {

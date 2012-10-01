@@ -19,13 +19,13 @@ func NewSvcLocator() ServiceLocator {
 	return &secureWebSvcLocator{}
 }
 
-type secureWebSvcLocator struct {}
+type secureWebSvcLocator struct{}
 
 func (svcloc *secureWebSvcLocator) ServiceAddress() string {
 	return EndPoint()
 }
 
-func (svcloc *secureWebSvcLocator) WebService(rawurl string) (WebService,error) {
+func (svcloc *secureWebSvcLocator) WebService(rawurl string) (WebService, error) {
 	if rawurl == "" {
 		rawurl = svcloc.ServiceAddress()
 	}
@@ -34,21 +34,22 @@ func (svcloc *secureWebSvcLocator) WebService(rawurl string) (WebService,error) 
 		return nil, err
 	}
 	wsvc := &soapWebSvc{
-	url: u,
-	client: new(http.Client),
+		url:    u,
+		client: new(http.Client),
 	}
 	return wsvc, nil
 }
 
 type soapWebSvc struct {
-	url *url.URL
+	url    *url.URL
 	client *http.Client
 }
 
 func (svc *soapWebSvc) ExecCmd(request *http.Request) (*http.Response, error) {
 	fmt.Printf("==ExecCmd(%q)...\n", request)
 	resp, err := svc.client.Do(request)
-	fmt.Printf("==> resp=%v\n   err=%v\n", resp,err)
+	fmt.Printf("==> resp=%v\n   err=%v\n", resp, err)
 	return resp, err
 }
+
 // EOF

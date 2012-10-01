@@ -24,5 +24,4 @@ func LoadCert(cert_fname, key_fname string) (user_cert, user_key []byte, err err
 	return
 }
 
-
 // EOF

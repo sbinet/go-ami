@@ -13,19 +13,19 @@ import (
 )
 
 type Client struct {
-	verbose    bool
-	vformat    string
-	config     Config
-	cert       *tls.Certificate
-	client     *http.Client
+	verbose bool
+	vformat string
+	config  Config
+	cert    *tls.Certificate
+	client  *http.Client
 }
 
 func NewClient(verbose bool, format string) *Client {
 	c := &Client{
 		verbose: verbose,
 		vformat: format,
-	config: NewConfig(),
-	client: nil,
+		config:  NewConfig(),
+		client:  nil,
 	}
 
 	err := c.authenticate()
@@ -36,8 +36,8 @@ func NewClient(verbose bool, format string) *Client {
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{
-		    Certificates: []tls.Certificate {*c.cert},
-		    InsecureSkipVerify: true,
+			Certificates:       []tls.Certificate{*c.cert},
+			InsecureSkipVerify: true,
 		},
 	}
 	c.client = &http.Client{Transport: tr}
@@ -63,27 +63,27 @@ func (c *Client) Execute(args ...string) (*Message, error) {
 			val = arg[idx+1:]
 			arg = arg[0:idx]
 		}
-		amiargs = append(amiargs, fmt.Sprintf("-%s=%s", arg,val))
+		amiargs = append(amiargs, fmt.Sprintf("-%s=%s", arg, val))
 	}
 	cmd.Add("Command", strings.Join(amiargs, " "))
 	if c.verbose {
 		fmt.Printf("==> %v\n", amiargs)
 	}
 	path := "/AMI/servlet/net.hep.atlas.Database.Bookkeeping.AMI.Servlet.Command"
-	rawurl := NewSvcLocator().ServiceAddress()+path+"?"+cmd.Encode()
+	rawurl := NewSvcLocator().ServiceAddress() + path + "?" + cmd.Encode()
 	if c.verbose {
 		fmt.Printf("url: %v\n", rawurl)
 	}
 
-    req, err := http.NewRequest("GET", rawurl, nil)
+	req, err := http.NewRequest("GET", rawurl, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	resp, err := c.client.Do(req)
-    if err!=nil {
+	if err != nil {
 		return nil, err
-    }
+	}
 
 	if resp.Status != "200 OK" {
 		fmt.Println(resp.Status)

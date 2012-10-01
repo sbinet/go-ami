@@ -2,8 +2,8 @@ package ami
 
 import (
 	"fmt"
-	"strings"
 	"sort"
+	"strings"
 )
 
 // GetPeriods returns all periods at a specified detail level in the given year
@@ -14,13 +14,13 @@ func GetPeriods(c *Client, year, level int) ([]RunPeriod, error) {
 	}
 
 	cmd := []string{
-		"ListDataPeriods", 
+		"ListDataPeriods",
 		"-createdSince=2009-01-01 00:00:00",
 		fmt.Sprintf("-projectName=data%02d%%", year),
 	}
 
 	switch level {
-	case 1,2,3:
+	case 1, 2, 3:
 		cmd = append(cmd, fmt.Sprintf("-periodLevel=%d", level))
 	default:
 		return nil, fmt.Errorf("ami.GetPeriods: level must be 1,2 or 3 (got: %v)", level)
@@ -36,13 +36,13 @@ func GetPeriods(c *Client, year, level int) ([]RunPeriod, error) {
 		m := row.Value()
 		periods = append(periods,
 			RunPeriod{
-			Project: m["projectName"].(string),
-			Year: year,
-			Name: m["period"].(string),
-			Level: level,
-			Status: m["status"].(string),
-			Description: m["description"].(string),
-		})
+				Project:     m["projectName"].(string),
+				Year:        year,
+				Name:        m["period"].(string),
+				Level:       level,
+				Status:      m["status"].(string),
+				Description: m["description"].(string),
+			})
 	}
 
 	return periods, nil
@@ -50,7 +50,7 @@ func GetPeriods(c *Client, year, level int) ([]RunPeriod, error) {
 
 // GetRuns returns all runs contained in the given periods in the specified year
 func GetRuns(c *Client, str_periods string, year int) ([]int, error) {
-	
+
 	runset := make(map[int]struct{})
 	var periods []string
 	{
@@ -74,17 +74,17 @@ func GetRuns(c *Client, str_periods string, year int) ([]int, error) {
 
 	for _, period := range periods {
 		amiargs := []string{"GetRunsForDataPeriod"}
-		amiargs = append(amiargs, 
+		amiargs = append(amiargs,
 			fmt.Sprintf("-projectName=data%02d%%", year),
 			fmt.Sprintf("-period=%s", period),
-			)
+		)
 
 		msg, err := c.Execute(amiargs...)
 		if err != nil {
 			return nil, err
 		}
-	
-		for _,v := range msg.Result.Rows {
+
+		for _, v := range msg.Result.Rows {
 			m := v.Value()
 			//fmt.Printf("%d\n", m["runNumber"])
 			runset[m["runNumber"].(int)] = struct{}{}
@@ -92,11 +92,12 @@ func GetRuns(c *Client, str_periods string, year int) ([]int, error) {
 	}
 
 	runs := make([]int, 0, len(runset))
-	for k,_ := range runset {
+	for k, _ := range runset {
 		runs = append(runs, k)
 	}
-	
+
 	sort.Ints(runs)
 	return runs, nil
 }
+
 // EOF

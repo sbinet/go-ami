@@ -40,7 +40,7 @@ func main() {
 	g_ami = ami.NewClient(
 		g_cmd.Flag.Lookup("verbose").Value.Get().(bool),
 		g_cmd.Flag.Lookup("format").Value.Get().(string),
-		)
+	)
 	server := g_cmd.Flag.Lookup("server").Value.Get().(string)
 	if server != "main" && server != "replica" {
 		fmt.Printf("**error**. server has to be either 'main' or 'replica' (got: %q)\n", server)

@@ -56,71 +56,70 @@ func TestAmiMessage(t *testing.T) {
 	if len(row.Fields) != 4 {
 		t.Errorf("expected len(row.Fields)==4 (got: %v)\n", len(row.Fields))
 	}
-	for i,v := range []struct{
-		name string
-		data string
+	for i, v := range []struct {
+		name  string
+		data  string
 		value interface{}
 	}{
 		{"identifier", "1", 1},
 		{"name", "self", "self"},
 		{"description", "AMI router database", "AMI router database"},
 		{"projectType", "", ""},
-	}{
+	} {
 		if v.data != row.Fields[i].Data {
-			t.Errorf("expected [%v] for field [%v] (got: %v)\n", 
+			t.Errorf("expected [%v] for field [%v] (got: %v)\n",
 				v.data, v.name, row.Fields[i].Data)
 		}
 		if v.value != row.Fields[i].Value() {
-			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n", 
-				v.value, v.value, v.name, 
+			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n",
+				v.value, v.value, v.name,
 				row.Fields[i].Value(),
 				row.Fields[i].Value(),
 				row.Fields[i].TypeName)
 		}
 
 		if v.value != row.Value()[v.name] {
-			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n", 
-				v.value, v.value, v.name, 
+			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n",
+				v.value, v.value, v.name,
 				row.Value()[v.name],
 				row.Value()[v.name],
 				row.Fields[i].TypeName)
 		}
 	}
-	
 
 	row = msg.Result.Rows[1]
 	if row.Id() != 56 {
 		t.Errorf("expected Num()==56 (got: %v)\n", row.Id())
 	}
 
-	for i,v := range []struct{
-		name string
-		data string
+	for i, v := range []struct {
+		name  string
+		data  string
 		value interface{}
 	}{
 		{"identifier", "173", 173},
 		{"name", "mc12_001", "mc12_001"},
 		{"description", "ATLAS_AMI_MC12_01 data", "ATLAS_AMI_MC12_01 data"},
 		{"projectType", "Atlas_Production", "Atlas_Production"},
-	}{
+	} {
 		if v.data != row.Fields[i].Data {
-			t.Errorf("expected [%v] for field [%v] (got: %v)\n", 
+			t.Errorf("expected [%v] for field [%v] (got: %v)\n",
 				v.data, v.name, row.Fields[i].Data)
 		}
 		if v.value != row.Fields[i].Value() {
-			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n", 
-				v.value, v.value, v.name, 
+			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n",
+				v.value, v.value, v.name,
 				row.Fields[i].Value(),
 				row.Fields[i].Value(),
 				row.Fields[i].TypeName)
 		}
 		if v.value != row.Value()[v.name] {
-			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n", 
-				v.value, v.value, v.name, 
+			t.Errorf("expected [%v](type=%T) for field [%v] (got: %v (%T,%s))\n",
+				v.value, v.value, v.name,
 				row.Value()[v.name],
 				row.Value()[v.name],
 				row.Fields[i].TypeName)
 		}
 	}
-	
+
 }
