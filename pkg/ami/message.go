@@ -2,24 +2,97 @@ package ami
 
 import (
 	"encoding/xml"
-	//"time"
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type Message struct {
 	XMLName xml.Name `xml:"AMIMessage"`
-	Command string `xml:"command"`
+	Cmd string `xml:"command"`
 	//Time time.Time `xml:"time"`
-	CommandArgs []*CmdArgs `xml:"commandArgs"`
+	CmdArgs []xml_cmdarg `xml:"commandArgs>args"`
 	Result Result `xml:"Result"`
-	Status string `xml:"commandStatus"`
+	CmdStatus string `xml:"commandStatus"`
 	ExecTime float64 `xml:"executionTime"`
 }
 
-type CmdArgs struct {
-	
+func (msg *Message) Status() bool {
+	return msg.CmdStatus == "successful"
+}
+
+type xml_cmdarg struct {
+	Name string `xml:"argName,attr"`
+	Value string `xml:"argValue,attr"`
 }
 
 type Result struct {
+	Rows []*Row `xml:"rowset>row"`
+}
+
+type xml_rowfield struct {
+	Name string `xml:"name,attr"`
+	Table string `xml:"table,attr"`
+	TypeName string `xml:"type,attr"`
+	Data string `xml:",chardata"`
+}
+
+type Row struct {
+	Num string `xml:"num,attr"`
+	Fields []xml_rowfield `xml:"field"`
+}
+
+func (r *Row) Id() int {
+	i,err := strconv.Atoi(r.Num)
+	if err != nil {
+		panic(fmt.Sprintf("ami.Row.Num: %v\n", err))
+	}
+	return i
+}
+
+func (r *Row) Get(key string) interface{} {
+	for _, f := range r.Fields {
+		if key == f.Name {
+			return f.Value()
+		}
+	}
+	panic(fmt.Sprintf("ami.Row.Get: no such key [%s]", key))
+}
+
+func (r *Row) Value() map[string]interface{} {
+	o := make(map[string]interface{}, len(r.Fields))
+	for _, f :=range r.Fields {
+		o[f.Name] = f.Value()
+	}
+	return o
+}
+
+func (r *xml_rowfield) Value() interface{} {
+	tn := strings.ToLower(r.TypeName)
+	if strings.HasPrefix(tn, "integer") {
+		val, err := strconv.Atoi(r.Data)
+		if err != nil {
+			panic(fmt.Sprintf("ami.Row.Value: %v\n", err))
+		}
+		return val
+	}
+	
+	if strings.HasPrefix(tn, "varchar") || tn == "text" || 
+		strings.HasPrefix(tn, "char") {
+		return r.Data
+	}
+
+	if strings.HasPrefix(tn, "datetime") {
+		layout := "2006-01-02 15:04:05"
+		val, err := time.Parse(layout, r.Data)
+		if err != nil {
+			panic(fmt.Sprintf("ami.Row.Value: %v\n", err))
+		}
+		return val
+	}
+
+	panic("ami.Row.Value: unhandled typename ["+r.TypeName+"] (value="+r.Data+")")
 }
 
 /*

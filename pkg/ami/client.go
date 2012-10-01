@@ -62,10 +62,14 @@ func (c *Client) Execute(args ...string) (*Message, error) {
 		amiargs = append(amiargs, fmt.Sprintf("-%s=%s", arg,val))
 	}
 	cmd.Add("Command", strings.Join(amiargs, " "))
-	fmt.Printf("==> %v\n", amiargs)
+	if c.verbose {
+		fmt.Printf("==> %v\n", amiargs)
+	}
 	path := "/AMI/servlet/net.hep.atlas.Database.Bookkeeping.AMI.Servlet.Command"
 	rawurl := NewSvcLocator().ServiceAddress()+path+"?"+cmd.Encode()
-	fmt.Printf("url: %v\n", rawurl)
+	if c.verbose {
+		fmt.Printf("url: %v\n", rawurl)
+	}
 
     req, err := http.NewRequest("GET", rawurl, nil)
 	if err != nil {

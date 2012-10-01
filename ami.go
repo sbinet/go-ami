@@ -17,6 +17,7 @@ func main() {
 	g_cmd = &commander.Commander{
 		Name: os.Args[0],
 		Commands: []*commander.Command{
+			ami_make_cmd_cmd(),
 			ami_make_list_runs_cmd(),
 			ami_make_list_projects_cmd(),
 			ami_make_setup_auth_cmd(),
@@ -49,8 +50,10 @@ func main() {
 
 	args := g_cmd.Flag.Args()
 
-	fmt.Printf("%s: server=%v\n", g_cmd.Name, g_cmd.Flag.Lookup("server").Value)
-	fmt.Printf("%s: args=%v\n", g_cmd.Name, args)
+	if g_cmd.Flag.Lookup("verbose").Value.Get().(bool) {
+		fmt.Printf("%s: server=%v\n", g_cmd.Name, g_cmd.Flag.Lookup("server").Value)
+		fmt.Printf("%s: args=%v\n", g_cmd.Name, args)
+	}
 	err = g_cmd.Run(args)
 	if err != nil {
 		fmt.Printf("**err** %v\n", err)
