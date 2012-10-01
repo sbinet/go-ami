@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -18,7 +18,6 @@ type Client struct {
 	config     Config
 	cert       *tls.Certificate
 	client     *http.Client
-	//svclocator ServiceLocator
 }
 
 func NewClient(verbose bool, format string) *Client {
@@ -26,7 +25,6 @@ func NewClient(verbose bool, format string) *Client {
 		verbose: verbose,
 		vformat: format,
 	config: NewConfig(),
-	//svclocator: NewSvcLocator(),
 	client: nil,
 	}
 	return c
@@ -36,7 +34,6 @@ func (c *Client) Execute(args ...string) (*Message, error) {
 
 	err := c.authenticate()
 	if err != nil {
-		fmt.Printf("errrr\n")
 		return nil, err
 	}
 
@@ -44,7 +41,6 @@ func (c *Client) Execute(args ...string) (*Message, error) {
 		TLSClientConfig: &tls.Config{
 		    Certificates: []tls.Certificate {*c.cert},
 		    InsecureSkipVerify: true,
-		//ClientAuth:  tls.RequireAndVerifyClientCert,
 		},
 	}
 	c.client = &http.Client{Transport: tr}
@@ -61,7 +57,6 @@ func (c *Client) Execute(args ...string) (*Message, error) {
 		}
 		if idx := strings.Index(arg, "="); idx > -1 {
 			val = arg[idx+1:]
-			//val = strings.Replace(val, "=", "\=", -1)
 			arg = arg[0:idx]
 		}
 		amiargs = append(amiargs, fmt.Sprintf("-%s=%s", arg,val))
@@ -115,14 +110,15 @@ func (c *Client) authenticate() error {
 		cert_fname = os.Getenv("X509_USER_PROXY")
 		key_fname = cert_fname
 	} else {
-		cert_fname = os.ExpandEnv("${HOME}/.config/go-ami/certs/usercert.pem")
-		key_fname = os.ExpandEnv("${HOME}/.config/go-ami/certs/userkey.pem")
+		cert_fname = filepath.Join(os.ExpandEnv(CertDir), "usercert.pem")
+		key_fname = filepath.Join(os.ExpandEnv(CertDir), "userkey.pem")
 	}
 
 	cert, err := tls.LoadX509KeyPair(cert_fname, key_fname)
 	if err != nil {
-		user_cert, user_key, err := load_cert(cert_fname, key_fname)
+		user_cert, user_key, err := LoadCert(cert_fname, key_fname)
 		if err != nil {
+			fmt.Printf("ami: error while trying to load certificate. try running:\n  $ go-ami setup-auth\n")
 			return err
 		}
 		cert, err = tls.X509KeyPair(user_cert, user_key)
@@ -132,24 +128,6 @@ func (c *Client) authenticate() error {
 	}
 	c.cert = &cert
 	return nil
-}
-
-func load_cert(cert_fname, key_fname string) (user_cert, user_key []byte, err error) {
-	user_cert, err = ioutil.ReadFile(cert_fname)
-	if err != nil {
-		return
-	}
-
-	// decrypt key-file
-	cmd := exec.Command("openssl", "rsa", "-in", key_fname)
-	cmd.Stdin = os.Stdin
-	cmd.Stderr = os.Stderr
-	user_key, err = cmd.Output()
-	if err != nil {
-		return
-	}
-
-	return
 }
 
 // EOF

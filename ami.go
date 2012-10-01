@@ -19,6 +19,7 @@ func main() {
 		Commands: []*commander.Command{
 			ami_make_list_runs_cmd(),
 			ami_make_list_projects_cmd(),
+			ami_make_setup_auth_cmd(),
 		},
 		Flag: flag.NewFlagSet("ami", flag.ExitOnError),
 	}
