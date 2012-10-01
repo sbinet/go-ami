@@ -19,12 +19,6 @@ func run_any_cmd(cmd *commander.Command, args []string) {
 		os.Exit(1)
 	}
 
-	// fmt.Printf("msg: [%v]\n", msg.XMLName)
-	// fmt.Printf("command:  %q\n", msg.Cmd)
-	// fmt.Printf("cmd-args: %v\n", msg.CmdArgs)
-	// fmt.Printf("status:   %q %v\n", msg.CmdStatus, msg.Status())
-	// fmt.Printf("exectime: %vs\n", msg.ExecTime)
-	// fmt.Printf("rows:     %v\n", len(msg.Result.Rows))
 	for i, row := range msg.Result.Rows {
 		fmt.Printf("row=%d\n", i)
 		m := row.Value()
