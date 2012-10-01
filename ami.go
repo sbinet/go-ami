@@ -43,10 +43,6 @@ func main() {
 		g_cmd.Flag.Lookup("format").Value.Get().(string),
 		g_cmd.Flag.Lookup("n").Value.Get().(int),
 	)
-	if err != nil {
-		fmt.Printf("**error** could not create ami.Client: %v\n", err)
-		os.Exit(1)
-	}
 	server := g_cmd.Flag.Lookup("server").Value.Get().(string)
 	if server != "main" && server != "replica" {
 		fmt.Printf("**error**. server has to be either 'main' or 'replica' (got: %q)\n", server)
@@ -59,6 +55,15 @@ func main() {
 	if g_cmd.Flag.Lookup("verbose").Value.Get().(bool) {
 		fmt.Printf("%s: server=%v\n", g_cmd.Name, g_cmd.Flag.Lookup("server").Value)
 		fmt.Printf("%s: args=%v\n", g_cmd.Name, args)
+	}
+	if len(args)>0 && args[0] != "help" && args[0] != "setup-auth" {
+		if err != nil {
+			fmt.Printf("**error** could not create ami.Client: %v\n", err)
+			if err == ami.ErrAuth {
+				fmt.Printf("**error** try running:\n  go-ami setup-auth\n")
+			}
+			os.Exit(1)
+		}
 	}
 	err = g_cmd.Run(args)
 	if err != nil {

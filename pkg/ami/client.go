@@ -12,6 +12,8 @@ import (
 	"strings"
 )
 
+var ErrAuth = fmt.Errorf("ami: error while trying to load certificate")
+
 type Client struct {
 	verbose  bool
 	vformat  string
@@ -43,8 +45,8 @@ func NewClient(verbose bool, format string, nqueries int) (*Client, error) {
 
 	err := c.authenticate()
 	if err != nil {
-		fmt.Printf("**error** %v\n", err)
-		return nil, err
+		//fmt.Printf("**error** %v\n", err)
+		return c, err
 	}
 
 	tr := &http.Transport{
@@ -138,8 +140,8 @@ func (c *Client) authenticate() error {
 	if err != nil {
 		user_cert, user_key, err := LoadCert(cert_fname, key_fname)
 		if err != nil {
-			fmt.Printf("ami: error while trying to load certificate. try running:\n  $ go-ami setup-auth\n")
-			return err
+			//fmt.Printf("ami: error while trying to load certificate. try running:\n  $ go-ami setup-auth\n")
+			return ErrAuth
 		}
 		cert, err = tls.X509KeyPair(user_cert, user_key)
 		if err != nil {
