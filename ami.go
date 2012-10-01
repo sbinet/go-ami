@@ -35,14 +35,18 @@ func main() {
 
 	err := g_cmd.Flag.Parse(os.Args[1:])
 	if err != nil {
-		fmt.Printf("**err** %v\n", err)
+		fmt.Printf("**error** %v\n", err)
 		os.Exit(1)
 	}
-	g_ami = ami.NewClient(
+	g_ami, err = ami.NewClient(
 		g_cmd.Flag.Lookup("verbose").Value.Get().(bool),
 		g_cmd.Flag.Lookup("format").Value.Get().(string),
 		g_cmd.Flag.Lookup("n").Value.Get().(int),
 	)
+	if err != nil {
+		fmt.Printf("**error** could not create ami.Client: %v\n", err)
+		os.Exit(1)
+	}
 	server := g_cmd.Flag.Lookup("server").Value.Get().(string)
 	if server != "main" && server != "replica" {
 		fmt.Printf("**error**. server has to be either 'main' or 'replica' (got: %q)\n", server)
@@ -58,7 +62,7 @@ func main() {
 	}
 	err = g_cmd.Run(args)
 	if err != nil {
-		fmt.Printf("**err** %v\n", err)
+		fmt.Printf("**error** %v\n", err)
 		os.Exit(1)
 	}
 }

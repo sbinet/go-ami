@@ -13,7 +13,7 @@ func run_list_projects(cmd *commander.Command, args []string) {
 
 	msg, err := g_ami.Execute("ListProject")
 	if err != nil {
-		fmt.Printf("**err** %v\n", err)
+		fmt.Printf("**error** %v\n", err)
 		os.Exit(1)
 	}
 

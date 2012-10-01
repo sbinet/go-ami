@@ -21,7 +21,7 @@ type Client struct {
 	nqueries int // number of possible concurrent queries
 }
 
-func NewClient(verbose bool, format string, nqueries int) *Client {
+func NewClient(verbose bool, format string, nqueries int) (*Client, error) {
 	c := &Client{
 		verbose:  verbose,
 		vformat:  format,
@@ -43,8 +43,8 @@ func NewClient(verbose bool, format string, nqueries int) *Client {
 
 	err := c.authenticate()
 	if err != nil {
-		fmt.Printf("**err** %v\n", err)
-		return nil
+		fmt.Printf("**error** %v\n", err)
+		return nil, err
 	}
 
 	tr := &http.Transport{
@@ -55,7 +55,7 @@ func NewClient(verbose bool, format string, nqueries int) *Client {
 	}
 	c.client = &http.Client{Transport: tr}
 
-	return c
+	return c, nil
 }
 
 func (c *Client) Execute(args ...string) (*Message, error) {

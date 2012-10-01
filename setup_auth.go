@@ -31,7 +31,7 @@ func run_setup_auth(cmd *commander.Command, args []string) {
 	if !path_exists(dirname) {
 		err := os.MkdirAll(dirname, 0700)
 		if err != nil {
-			fmt.Printf("**err** %v\n", err)
+			fmt.Printf("**error** %v\n", err)
 			os.Exit(1)
 		}
 	}
@@ -39,7 +39,7 @@ func run_setup_auth(cmd *commander.Command, args []string) {
 	if !path_exists(dirname) {
 		err := os.MkdirAll(dirname, 0700)
 		if err != nil {
-			fmt.Printf("**err** %v\n", err)
+			fmt.Printf("**error** %v\n", err)
 			os.Exit(1)
 		}
 	}

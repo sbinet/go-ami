@@ -15,7 +15,7 @@ func run_any_cmd(cmd *commander.Command, args []string) {
 
 	msg, err := g_ami.Execute(args...)
 	if err != nil {
-		fmt.Printf("**err** %v\n", err)
+		fmt.Printf("**error** %v\n", err)
 		os.Exit(1)
 	}
 

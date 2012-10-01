@@ -21,7 +21,7 @@ func run_list_runs(cmd *commander.Command, args []string) {
 
 	runs, err := ami.GetRuns(g_ami, periods, year)
 	if err != nil {
-		fmt.Printf("**err** %v\n", err)
+		fmt.Printf("**error** %v\n", err)
 		os.Exit(1)
 	}
 
