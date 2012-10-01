@@ -99,7 +99,7 @@ func GetRuns(c *Client, str_periods string, year int) ([]int, error) {
 				}
 				close(runch[ich])
 			}
-			<- jobs
+			<-jobs
 		}(i)
 	}
 	done := 0

@@ -13,30 +13,30 @@ import (
 )
 
 type Client struct {
-	verbose bool
-	vformat string
-	config  Config
-	cert    *tls.Certificate
-	client  *http.Client
+	verbose  bool
+	vformat  string
+	config   Config
+	cert     *tls.Certificate
+	client   *http.Client
 	nqueries int // number of possible concurrent queries
 }
 
 func NewClient(verbose bool, format string, nqueries int) *Client {
 	c := &Client{
-		verbose: verbose,
-		vformat: format,
-		config:  NewConfig(),
-		client:  nil,
+		verbose:  verbose,
+		vformat:  format,
+		config:   NewConfig(),
+		client:   nil,
 		nqueries: nqueries,
 	}
 	nqueries = 5
 	if c.nqueries < 1 {
-		fmt.Printf("ami: nqueries too low (==%v). setting to %v\n", 
+		fmt.Printf("ami: nqueries too low (==%v). setting to %v\n",
 			c.nqueries, nqueries)
 		c.nqueries = nqueries
 	}
 	if c.nqueries > 10 {
-		fmt.Printf("ami: nqueries too high (==%v). setting to %v\n", 
+		fmt.Printf("ami: nqueries too high (==%v). setting to %v\n",
 			c.nqueries, nqueries)
 		c.nqueries = nqueries
 	}
