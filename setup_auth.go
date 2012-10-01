@@ -24,8 +24,8 @@ func path_exists(name string) bool {
 
 func run_setup_auth(cmd *commander.Command, args []string) {
 	n := cmd.Name()
-	fmt.Printf("%s:  args: %v\n", n, args)
-	fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
+	// fmt.Printf("%s:  args: %v\n", n, args)
+	// fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
 
 	dirname := os.ExpandEnv(ami.ConfigDir)
 	if !path_exists(dirname) {

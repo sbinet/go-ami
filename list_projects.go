@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/sbinet/go-commander"
 	"github.com/sbinet/go-flag"
@@ -16,9 +17,16 @@ func run_list_projects(cmd *commander.Command, args []string) {
 		os.Exit(1)
 	}
 
+	projs := make([]string, 0, len(msg.Result.Rows))
 	for _, v := range msg.Result.Rows {
 		m := v.Value()
-		fmt.Printf("%s (descr=%q)\n", m["name"], m["description"])
+		projs = append(projs, 
+			fmt.Sprintf("%s (descr=%q)",m["name"].(string), m["description"].(string)),
+			)
+	}
+	sort.Strings(projs)
+	for _, proj := range projs {
+		fmt.Printf("%s\n", proj)
 	}
 }
 
