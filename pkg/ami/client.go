@@ -18,14 +18,27 @@ type Client struct {
 	config  Config
 	cert    *tls.Certificate
 	client  *http.Client
+	nqueries int // number of possible concurrent queries
 }
 
-func NewClient(verbose bool, format string) *Client {
+func NewClient(verbose bool, format string, nqueries int) *Client {
 	c := &Client{
 		verbose: verbose,
 		vformat: format,
 		config:  NewConfig(),
 		client:  nil,
+		nqueries: nqueries,
+	}
+	nqueries = 5
+	if c.nqueries < 1 {
+		fmt.Printf("ami: nqueries too low (==%v). setting to %v\n", 
+			c.nqueries, nqueries)
+		c.nqueries = nqueries
+	}
+	if c.nqueries > 10 {
+		fmt.Printf("ami: nqueries too high (==%v). setting to %v\n", 
+			c.nqueries, nqueries)
+		c.nqueries = nqueries
 	}
 
 	err := c.authenticate()

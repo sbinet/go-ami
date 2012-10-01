@@ -27,6 +27,7 @@ func main() {
 	g_cmd.Flag.Bool("verbose", false, "show verbose output")
 	g_cmd.Flag.Bool("debug", false, "show a stack trace")
 	g_cmd.Flag.String("format", "text", "format of verbose output")
+	g_cmd.Flag.Int("n", 5, "number of concurrent queries")
 
 	//TODO: check the value *is* in the [main,replica] list via a special
 	//      flag.Value implementation ?
@@ -40,6 +41,7 @@ func main() {
 	g_ami = ami.NewClient(
 		g_cmd.Flag.Lookup("verbose").Value.Get().(bool),
 		g_cmd.Flag.Lookup("format").Value.Get().(string),
+		g_cmd.Flag.Lookup("n").Value.Get().(int),
 	)
 	server := g_cmd.Flag.Lookup("server").Value.Get().(string)
 	if server != "main" && server != "replica" {
