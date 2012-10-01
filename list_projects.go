@@ -20,9 +20,9 @@ func run_list_projects(cmd *commander.Command, args []string) {
 	projs := make([]string, 0, len(msg.Result.Rows))
 	for _, v := range msg.Result.Rows {
 		m := v.Value()
-		projs = append(projs, 
-			fmt.Sprintf("%s (descr=%q)",m["name"].(string), m["description"].(string)),
-			)
+		projs = append(projs,
+			fmt.Sprintf("%s (descr=%q)", m["name"].(string), m["description"].(string)),
+		)
 	}
 	sort.Strings(projs)
 	for _, proj := range projs {
