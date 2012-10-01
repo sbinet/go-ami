@@ -11,9 +11,6 @@ import (
 
 func run_list_runs(cmd *commander.Command, args []string) {
 
-	// n := cmd.Name()
-	// fmt.Printf("%s:  args: %v\n", n, args)
-	// fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
 	year := cmd.Flag.Lookup("year").Value.Get().(int)
 	if year > 2000 {
 		year %= 1000
