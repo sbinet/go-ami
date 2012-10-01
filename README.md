@@ -15,3 +15,8 @@ Installation
 $ go get github.com/sbinet/go-ami
 ```
 
+Documentation
+-------------
+
+Available on [go-pkgdoc](http://go.pkgdoc.org/github.com/sbinet/go-ami/pkg/ami)
+
