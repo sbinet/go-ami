@@ -124,16 +124,15 @@ func (c *Client) authenticate() error {
 		return nil
 	}
 
-	cert_fname := ""
-	key_fname := ""
+	cert_fname := filepath.Join(os.ExpandEnv(CertDir), "usercert.pem")
+	key_fname := filepath.Join(os.ExpandEnv(CertDir), "userkey.pem")
 
-	if os.Getenv("X509_USER_PROXY") != "" {
-		cert_fname = os.Getenv("X509_USER_PROXY")
-		key_fname = cert_fname
-	} else {
-		cert_fname = filepath.Join(os.ExpandEnv(CertDir), "usercert.pem")
-		key_fname = filepath.Join(os.ExpandEnv(CertDir), "userkey.pem")
-	}
+	//FIXME: 
+	// X509_USER_PROXY doesn't have a format tls.LoadX509KeyPair understands
+	// if os.Getenv("X509_USER_PROXY") != "" {
+	// 	cert_fname = os.Getenv("X509_USER_PROXY")
+	// 	key_fname = cert_fname
+	// }
 
 	cert, err := tls.LoadX509KeyPair(cert_fname, key_fname)
 	if err != nil {
