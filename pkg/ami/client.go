@@ -27,14 +27,11 @@ func NewClient(verbose bool, format string) *Client {
 	config: NewConfig(),
 	client: nil,
 	}
-	return c
-}
-
-func (c *Client) Execute(args ...string) (*Message, error) {
 
 	err := c.authenticate()
 	if err != nil {
-		return nil, err
+		fmt.Printf("**err** %v\n", err)
+		return nil
 	}
 
 	tr := &http.Transport{
@@ -44,6 +41,13 @@ func (c *Client) Execute(args ...string) (*Message, error) {
 		},
 	}
 	c.client = &http.Client{Transport: tr}
+
+	return c
+}
+
+func (c *Client) Execute(args ...string) (*Message, error) {
+
+	var err error
 
 	cmd := url.Values{}
 	amiargs := []string{args[0]}

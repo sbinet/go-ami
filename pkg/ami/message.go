@@ -70,7 +70,7 @@ func (r *Row) Value() map[string]interface{} {
 
 func (r *xml_rowfield) Value() interface{} {
 	tn := strings.ToLower(r.TypeName)
-	if strings.HasPrefix(tn, "integer") {
+	if strings.HasPrefix(tn, "integer") || strings.HasPrefix(tn,"number") {
 		val, err := strconv.Atoi(r.Data)
 		if err != nil {
 			panic(fmt.Sprintf("ami.Row.Value: %v\n", err))
