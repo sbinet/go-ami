@@ -72,54 +72,47 @@ func GetRuns(c *Client, str_periods string, year int) ([]int, error) {
 		}
 	}
 
+	type response struct {
+		run int
+		err error
+	}
 	jobs := make(chan int, c.nqueries)
-	errch := make(chan error)
-	runch := make([]chan int, len(periods))
+	runch := make([]chan response, len(periods))
 	for i, period := range periods {
 		amiargs := []string{"GetRunsForDataPeriod"}
 		amiargs = append(amiargs,
 			fmt.Sprintf("-projectName=data%02d%%", year),
 			fmt.Sprintf("-period=%s", period),
 		)
-		runch[i] = make(chan int)
+		runch[i] = make(chan response)
 
 		go func(ich int) {
 			jobs <- 1
 			msg, err := c.Execute(amiargs...)
 			if err != nil {
-				//return nil, err
-				errch <- err
+				//fmt.Printf("**error** %v\n", err)
+				runch[ich] <- response{0, err}
 			} else {
 
 				for _, v := range msg.Result.Rows {
 					m := v.Value()
 					//fmt.Printf("--> %d (%d)\n", m["runNumber"], ich)
 					//runset[m["runNumber"].(int)] = struct{}{}
-					runch[ich] <- m["runNumber"].(int)
+					runch[ich] <- response{m["runNumber"].(int), nil}
 				}
 				close(runch[ich])
 			}
 			<-jobs
 		}(i)
 	}
-	done := 0
-	for {
-		//fmt.Printf("runch: %v, done: %v/%v\n", len(runch), done, len(periods))
-		select {
-		case err := <-errch:
-			fmt.Printf("err: %v\n", err)
-			return nil, err
-		default:
-			for _, ch := range runch {
-				for run := range ch {
-					runset[run] = struct{}{}
-					//fmt.Printf("<<- %d\n", run)
-				}
+	for _, ch := range runch {
+		for r := range ch {
+			if r.err != nil {
+				//fmt.Printf("**error** %v\n", r.err)
+				return nil, r.err
 			}
-			done += 1
-		}
-		if done == len(periods) {
-			break
+			runset[r.run] = struct{}{}
+			//fmt.Printf("<<- %d\n", r.run)
 		}
 	}
 
