@@ -56,7 +56,7 @@ func main() {
 		fmt.Printf("%s: server=%v\n", g_cmd.Name, g_cmd.Flag.Lookup("server").Value)
 		fmt.Printf("%s: args=%v\n", g_cmd.Name, args)
 	}
-	if len(args)>0 && args[0] != "help" && args[0] != "setup-auth" {
+	if len(args) > 0 && args[0] != "help" && args[0] != "setup-auth" {
 		if err != nil {
 			fmt.Printf("**error** could not create ami.Client: %v\n", err)
 			if err == ami.ErrAuth {
