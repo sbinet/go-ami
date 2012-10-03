@@ -18,6 +18,7 @@ func main() {
 		Name: os.Args[0],
 		Commands: []*commander.Command{
 			ami_make_cmd_cmd(),
+			ami_make_list_datasets_cmd(),
 			ami_make_list_runs_cmd(),
 			ami_make_list_projects_cmd(),
 			ami_make_setup_auth_cmd(),
