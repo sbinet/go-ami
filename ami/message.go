@@ -11,11 +11,11 @@ import (
 type Message struct {
 	XMLName xml.Name `xml:"AMIMessage"`
 	Cmd     string   `xml:"command"`
-	//Time time.Time `xml:"time"`
+	//Time      time.Time    `xml:"time"`
 	CmdArgs   []xml_cmdarg `xml:"commandArgs>args"`
 	Result    Result       `xml:"Result"`
 	CmdStatus string       `xml:"commandStatus"`
-	ExecTime  float64      `xml:"executionTime"`
+	//ExecTime  float64      `xml:"executionTime"`
 }
 
 func (msg *Message) Status() bool {
