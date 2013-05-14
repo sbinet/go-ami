@@ -39,7 +39,7 @@ func ami_make_list_runs_cmd() *commander.Command {
 list-runs lists the runs in a data period for a given year.
 
 ex:
- $ go-ami list-runs -year 2012 -period M1,M2
+ $ go-ami list-runs -year 2012 -periods M1,M2
 `,
 		Flag: *flag.NewFlagSet("ami-list-runs", flag.ExitOnError),
 	}
