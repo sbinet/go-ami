@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gonuts/commander"
+	"github.com/gonuts/flag"
 	"github.com/sbinet/go-ami/ami"
-	"github.com/sbinet/go-commander"
-	"github.com/sbinet/go-flag"
 )
 
 func run_list_datasets(cmd *commander.Command, args []string) {

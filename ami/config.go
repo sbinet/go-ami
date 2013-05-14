@@ -1,7 +1,7 @@
 package ami
 
 import (
-	"github.com/sbinet/go-config/config"
+	"github.com/gonuts/config"
 )
 
 type Config struct {

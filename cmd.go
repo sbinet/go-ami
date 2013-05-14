@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sbinet/go-commander"
-	"github.com/sbinet/go-flag"
+	"github.com/gonuts/commander"
+	"github.com/gonuts/flag"
 )
 
 func run_any_cmd(cmd *commander.Command, args []string) {
