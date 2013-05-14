@@ -160,7 +160,7 @@ func search_query(c *Client, entity, cmd string, cmdargs []string, pattern, orde
 func expand_period_constraints(periods string) string {
 	ps := strings.Split(periods, ",")
 	sels := []string{}
-	for _,p := range ps {
+	for _, p := range ps {
 		switch len(p) {
 		case 0:
 		case 1:
@@ -206,7 +206,7 @@ func validate_field(field string, table *Table) (string, error) {
 			return "", fmt.Errorf("ami: %q is not associated with %q", table.Name, fname)
 		}
 		found := false
-		for _,v := range fentity.Fields {
+		for _, v := range fentity.Fields {
 			if v == ffield {
 				found = true
 				break
@@ -225,4 +225,5 @@ func validate_field(field string, table *Table) (string, error) {
 	}
 	return name, nil
 }
+
 // EOF

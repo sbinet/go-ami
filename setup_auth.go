@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sbinet/go-ami/pkg/ami"
+	"github.com/sbinet/go-ami/ami"
 	"github.com/sbinet/go-commander"
 	"github.com/sbinet/go-flag"
 )

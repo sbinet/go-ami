@@ -129,7 +129,7 @@ func (c *Client) authenticate() error {
 	cert_fname := filepath.Join(os.ExpandEnv(CertDir), "usercert.pem")
 	key_fname := filepath.Join(os.ExpandEnv(CertDir), "userkey.pem")
 
-	//FIXME: 
+	//FIXME:
 	// X509_USER_PROXY doesn't have a format tls.LoadX509KeyPair understands
 	// if os.Getenv("X509_USER_PROXY") != "" {
 	// 	cert_fname = os.Getenv("X509_USER_PROXY")

@@ -1,7 +1,7 @@
 package ami
 
 type Table struct {
-	Name string
+	Name    string
 	Fields  map[string]string
 	Primary string
 	Foreign map[string]*Table

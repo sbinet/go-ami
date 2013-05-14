@@ -5,7 +5,7 @@ import (
 	//"fmt"
 	"testing"
 
-	"github.com/sbinet/go-ami/pkg/ami"
+	"github.com/sbinet/go-ami/ami"
 )
 
 const testdata = `<?xml version="1.0" encoding="UTF-8" ?>
