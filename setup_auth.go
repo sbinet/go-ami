@@ -22,7 +22,7 @@ func path_exists(name string) bool {
 	return false
 }
 
-func run_setup_auth(cmd *commander.Command, args []string) {
+func run_setup_auth(cmd *commander.Command, args []string) error {
 	n := cmd.Name()
 	// fmt.Printf("%s:  args: %v\n", n, args)
 	// fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
@@ -31,16 +31,14 @@ func run_setup_auth(cmd *commander.Command, args []string) {
 	if !path_exists(dirname) {
 		err := os.MkdirAll(dirname, 0700)
 		if err != nil {
-			fmt.Printf("**error** %v\n", err)
-			os.Exit(1)
+			return err
 		}
 	}
 	dirname = os.ExpandEnv(ami.CertDir)
 	if !path_exists(dirname) {
 		err := os.MkdirAll(dirname, 0700)
 		if err != nil {
-			fmt.Printf("**error** %v\n", err)
-			os.Exit(1)
+			return err
 		}
 	}
 
@@ -55,24 +53,22 @@ func run_setup_auth(cmd *commander.Command, args []string) {
 
 	user_cert, user_key, err := ami.LoadCert(cert_fname, key_fname)
 	if err != nil {
-		fmt.Printf("%s: %v\n", n, err)
-		os.Exit(1)
+		return err
 	}
 
 	cert_fname = filepath.Join(dirname, "usercert.pem")
 	err = ioutil.WriteFile(cert_fname, user_cert, 0600)
 	if err != nil {
-		fmt.Printf("%s: %v\n", n, err)
-		os.Exit(1)
+		return err
 	}
 
 	key_fname = filepath.Join(dirname, "userkey.pem")
 	err = ioutil.WriteFile(key_fname, user_key, 0600)
 	if err != nil {
-		fmt.Printf("%s: %v\n", n, err)
-		os.Exit(1)
+		return err
 	}
 
+	return nil
 }
 
 func ami_make_setup_auth_cmd() *commander.Command {

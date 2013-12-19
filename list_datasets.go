@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/gonuts/commander"
 	"github.com/gonuts/flag"
 	"github.com/sbinet/go-ami/ami"
 )
 
-func run_list_datasets(cmd *commander.Command, args []string) {
+func run_list_datasets(cmd *commander.Command, args []string) error {
 	pattern := "%"
 	if len(args) > 0 {
 		pattern = args[0]
@@ -26,13 +25,14 @@ func run_list_datasets(cmd *commander.Command, args []string) {
 	datasets, err := ami.GetDatasets(g_ami, pattern, parent_type, order, level,
 		fields, flatten, show_archived, opts)
 	if err != nil {
-		fmt.Printf("**error** %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	for _, v := range datasets {
 		fmt.Printf("%s\n", v)
 	}
+
+	return nil
 }
 
 func ami_make_list_datasets_cmd() *commander.Command {

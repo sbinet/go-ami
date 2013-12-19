@@ -2,19 +2,17 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"sort"
 
 	"github.com/gonuts/commander"
 	"github.com/gonuts/flag"
 )
 
-func run_list_projects(cmd *commander.Command, args []string) {
+func run_list_projects(cmd *commander.Command, args []string) error {
 
 	msg, err := g_ami.Execute("ListProject")
 	if err != nil {
-		fmt.Printf("**error** %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	projs := make([]string, 0, len(msg.Result.Rows))
@@ -28,6 +26,8 @@ func run_list_projects(cmd *commander.Command, args []string) {
 	for _, proj := range projs {
 		fmt.Printf("%s\n", proj)
 	}
+
+	return err
 }
 
 func ami_make_list_projects_cmd() *commander.Command {

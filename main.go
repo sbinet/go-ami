@@ -10,20 +10,20 @@ import (
 )
 
 var g_ami *ami.Client
-var g_cmd *commander.Commander
+var g_cmd *commander.Command
 
 func main() {
 
-	g_cmd = &commander.Commander{
-		Name: os.Args[0],
-		Commands: []*commander.Command{
+	g_cmd = &commander.Command{
+		UsageLine: "go-ami",
+		Subcommands: []*commander.Command{
 			ami_make_cmd_cmd(),
 			ami_make_list_datasets_cmd(),
 			ami_make_list_runs_cmd(),
 			ami_make_list_projects_cmd(),
 			ami_make_setup_auth_cmd(),
 		},
-		Flag: flag.NewFlagSet("ami", flag.ExitOnError),
+		Flag: *flag.NewFlagSet("ami", flag.ExitOnError),
 	}
 	g_cmd.Flag.Bool("verbose", false, "show verbose output")
 	g_cmd.Flag.Bool("debug", false, "show a stack trace")
@@ -66,7 +66,7 @@ func main() {
 			os.Exit(1)
 		}
 	}
-	err = g_cmd.Run(args)
+	err = g_cmd.Dispatch(args)
 	if err != nil {
 		fmt.Printf("**error** %v\n", err)
 		os.Exit(1)

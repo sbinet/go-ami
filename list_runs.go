@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/gonuts/commander"
 	"github.com/gonuts/flag"
 	"github.com/sbinet/go-ami/ami"
 )
 
-func run_list_runs(cmd *commander.Command, args []string) {
+func run_list_runs(cmd *commander.Command, args []string) error {
 
 	year := cmd.Flag.Lookup("year").Value.Get().(int)
 	if year > 2000 {
@@ -21,13 +20,14 @@ func run_list_runs(cmd *commander.Command, args []string) {
 
 	runs, err := ami.GetRuns(g_ami, periods, year)
 	if err != nil {
-		fmt.Printf("**error** %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	for _, run := range runs {
 		fmt.Printf("%d\n", run)
 	}
+
+	return nil
 }
 
 func ami_make_list_runs_cmd() *commander.Command {

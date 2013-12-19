@@ -2,21 +2,19 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/gonuts/commander"
 	"github.com/gonuts/flag"
 )
 
-func run_any_cmd(cmd *commander.Command, args []string) {
+func run_any_cmd(cmd *commander.Command, args []string) error {
 	//n := cmd.Name()
 	//fmt.Printf("%s:  args: %v\n", n, args)
 	//fmt.Printf("%s: flags: %v\n", n, cmd.Flag.NArg())
 
 	msg, err := g_ami.Execute(args...)
 	if err != nil {
-		fmt.Printf("**error** %v\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	for i, row := range msg.Result.Rows {
@@ -26,6 +24,8 @@ func run_any_cmd(cmd *commander.Command, args []string) {
 			fmt.Printf("  -> %s=%v\n", k, v)
 		}
 	}
+
+	return nil
 }
 
 func ami_make_cmd_cmd() *commander.Command {
